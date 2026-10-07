@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +18,16 @@
         <strong>E-mail:</strong>
         <span th:text="${email}"></span>
     </p>
+
+    <nav aria-label="Áreas do sistema">
+        <p sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
+            <a th:href="@{/gerenciamento}">Gerenciamento</a>
+        </p>
+
+        <p sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Administração</a>
+        </p>
+    </nav>
 
     <form th:action="@{/logout}" method="post">
         <button type="submit">Sair</button>

@@ -21,6 +21,12 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/error"
                         ).permitAll()
+                        .requestMatchers("/admin", "/admin/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers(
+                                "/gerenciamento",
+                                "/gerenciamento/**"
+                        ).hasAnyRole("MANAGER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -39,6 +45,9 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
+                )
+                .exceptionHandling(erro -> erro
+                        .accessDeniedPage("/acesso-negado")
                 );
 
         return http.build();
