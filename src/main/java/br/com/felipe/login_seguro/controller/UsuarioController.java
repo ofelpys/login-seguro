@@ -22,7 +22,7 @@ public class UsuarioController {
 
     @GetMapping("/")
     public String inicio() {
-        return "redirect:/cadastro";
+        return "redirect:/inicio";
     }
 
     @GetMapping("/cadastro")
@@ -57,6 +57,6 @@ public class UsuarioController {
                 "Cadastro realizado com sucesso!"
         );
 
-        return "redirect:/cadastro";
+        return "redirect:/login";
     }
 }
