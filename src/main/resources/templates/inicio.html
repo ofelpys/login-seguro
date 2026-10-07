@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início | Login Seguro</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+<main class="container">
+    <h1>Bem-vindo!</h1>
+
+    <p>Você está conectado à sua conta.</p>
+
+    <p>
+        <strong>E-mail:</strong>
+        <span th:text="${email}"></span>
+    </p>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</main>
+</body>
+</html>

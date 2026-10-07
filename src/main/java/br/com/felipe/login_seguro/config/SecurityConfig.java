@@ -2,7 +2,6 @@ package br.com.felipe.login_seguro.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -17,14 +16,30 @@ public class SecurityConfig {
                 .authorizeHttpRequests(acesso -> acesso
                         .requestMatchers(
                                 "/",
+                                "/login",
                                 "/cadastro",
                                 "/css/**",
                                 "/error"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(login -> login.permitAll())
-                .logout(Customizer.withDefaults());
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("senha")
+                        .defaultSuccessUrl("/inicio", true)
+                        .failureUrl("/login?erro")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                );
 
         return http.build();
     }
