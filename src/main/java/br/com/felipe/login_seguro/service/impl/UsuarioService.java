@@ -11,6 +11,12 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.data.domain.Sort;
+import java.util.List;
+import br.com.felipe.login_seguro.dto.UsuarioAtualizacaoRequestDTO;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -22,15 +28,18 @@ public class UsuarioService implements IUsuarioService {
     private final IUsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
     private final PasswordEncoder passwordEncoder;
+    private final SessionRegistry sessionRegistry;
 
     public UsuarioService(
             IUsuarioRepository usuarioRepository,
             UsuarioMapper usuarioMapper,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            SessionRegistry sessionRegistry
     ) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
         this.passwordEncoder = passwordEncoder;
+        this.sessionRegistry = sessionRegistry;
     }
 
     @Override
@@ -68,5 +77,108 @@ public class UsuarioService implements IUsuarioService {
         }
 
         return usuarioMapper.toDTO(usuarioSalvo);
+    }
+
+    @Override
+    public List<UsuarioResponseDTO> listar() {
+        return usuarioRepository.findAll(Sort.by("nome"))
+                .stream()
+                .map(usuarioMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public UsuarioResponseDTO buscarPorId(String id) {
+        return usuarioMapper.toDTO(buscarEntidade(id));
+    }
+
+    @Override
+    public UsuarioResponseDTO atualizar(
+            String id,
+            UsuarioAtualizacaoRequestDTO dto,
+            String emailAdministrador
+    ) {
+        UsuarioEntity usuario = buscarEntidade(id);
+
+        String email = dto.email().strip().toLowerCase(Locale.ROOT);
+        String emailAnterior = usuario.getEmail();
+
+        boolean emailAlterado = !emailAnterior.equals(email);
+        boolean perfilAlterado = usuario.getPerfil() != dto.perfil();
+        boolean propriaConta = emailAnterior.equals(emailAdministrador);
+
+        if (propriaConta && (emailAlterado || perfilAlterado)) {
+            throw new IllegalArgumentException(
+                    "Para alterar seu próprio e-mail ou perfil, "
+                            + "use outra conta administrativa."
+            );
+        }
+
+        boolean emailEmUso = usuarioRepository.findByEmail(email)
+                .map(outro -> !outro.getId().equals(id))
+                .orElse(false);
+
+        if (emailEmUso) {
+            throw new IllegalArgumentException(
+                    "Este e-mail já está cadastrado."
+            );
+        }
+
+        usuario.setNome(dto.nome().strip());
+        usuario.setEmail(email);
+        usuario.setPerfil(dto.perfil());
+
+        UsuarioEntity usuarioSalvo;
+
+        try {
+            usuarioSalvo = usuarioRepository.save(usuario);
+        } catch (DuplicateKeyException exception) {
+            throw new IllegalArgumentException(
+                    "Este e-mail já está cadastrado.",
+                    exception
+            );
+        }
+
+        if (emailAlterado || perfilAlterado) {
+            invalidarSessoes(emailAnterior);
+        }
+
+        return usuarioMapper.toDTO(usuarioSalvo);
+    }
+
+    @Override
+    public void excluir(String id, String emailAdministrador) {
+        UsuarioEntity usuario = buscarEntidade(id);
+
+        if (usuario.getEmail().equals(emailAdministrador)) {
+            throw new IllegalArgumentException(
+                    "Você não pode excluir sua própria conta."
+            );
+        }
+
+        usuarioRepository.delete(usuario);
+        invalidarSessoes(usuario.getEmail());
+    }
+
+    private UsuarioEntity buscarEntidade(String id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Usuário não encontrado."
+                        )
+                );
+    }
+
+    private void invalidarSessoes(String email) {
+        for (Object principal : sessionRegistry.getAllPrincipals()) {
+            if (principal instanceof UserDetails usuarioLogado
+                    && usuarioLogado.getUsername().equals(email)) {
+
+                for (SessionInformation sessao :
+                        sessionRegistry.getAllSessions(principal, false)) {
+                    sessao.expireNow();
+                }
+            }
+        }
     }
 }

@@ -67,3 +67,61 @@ button {
     background: #eaf8ef;
     border-radius: 6px;
 }
+
+.container-amplo {
+    max-width: 900px;
+}
+
+.tabela-responsiva {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #d8dde3;
+}
+
+th {
+    background: var(--cor-fundo);
+}
+.campo select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #9099a5;
+    border-radius: 6px;
+    background-color: white;
+    font: inherit;
+}
+
+.campo select:focus-visible {
+    outline: 3px solid var(--cor-primaria, #2457c5);
+    outline-offset: 3px;
+}
+.acoes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.acoes form {
+    margin: 0;
+}
+
+.botao-excluir {
+    width: auto;
+    padding: 8px 12px;
+    background: #b42318;
+}
+
+.botao-excluir:hover {
+    background: #8a1c13;
+}
