@@ -56,6 +56,10 @@
         Ainda não tem conta?
         <a th:href="@{/cadastro}">Cadastre-se</a>
     </p>
+
+    <p class="erro" th:if="${param.expirada}">
+        Sua sessão foi encerrada. Entre novamente.
+    </p>
 </main>
 </body>
 </html>
