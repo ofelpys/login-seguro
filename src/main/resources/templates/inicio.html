@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/layout :: head('Início')}"></head>
+
+<body>
+<header th:replace="~{fragmentos/layout :: cabecalho}"></header>
+
+<main class="container">
+    <h1>Bem-vindo!</h1>
+
+    <p>Você está conectado à sua conta.</p>
+
+    <p>
+        <strong>E-mail:</strong>
+        <span th:text="${email}"></span>
+    </p>
+</main>
+
+<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+</body>
+</html>

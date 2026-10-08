@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: head('Administração')}"></head>
+<body>
+<header th:replace="~{fragmentos/layout :: cabecalho}"></header>
+<main class="container">
+    <h1>Administração</h1>
+    <p>Você tem acesso à área administrativa.</p>
+    <p>
+        <a th:href="@{/admin/usuarios}">Gerenciar usuários</a>
+    </p>
+    <a th:href="@{/inicio}">Voltar ao início</a>
+</main>
+<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+</body>
+</html>
