@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar usuário</title>
-    <link rel="stylesheet" th:href="@{/css/estilo.css}">
-</head>
+<head th:replace="~{fragmentos/layout :: head('Editar Usuário')}"></head>
 <body>
+<header th:replace="~{fragmentos/layout :: cabecalho}"></header>
 <main class="container">
     <h1>Editar usuário</h1>
 
@@ -67,5 +63,6 @@
         <a th:href="@{/admin/usuarios}">Cancelar</a>
     </p>
 </main>
+<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
 </body>
 </html>

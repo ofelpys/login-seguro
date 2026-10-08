@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuários | Login Seguro</title>
-
-    <link rel="stylesheet" th:href="@{/css/estilo.css}">
-</head>
+<head th:replace="~{fragmentos/layout :: head('Usuários')}"></head>
 <body>
+<header th:replace="~{fragmentos/layout :: cabecalho}"></header>
 <main class="container container-amplo">
     <h1>Usuários cadastrados</h1>
     <p class="sucesso"
@@ -64,5 +59,6 @@
         <a th:href="@{/admin}">Voltar à administração</a>
     </p>
 </main>
+<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
 </body>
 </html>

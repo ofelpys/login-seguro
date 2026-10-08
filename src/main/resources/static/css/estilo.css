@@ -125,3 +125,55 @@ th {
 .botao-excluir:hover {
     background: #8a1c13;
 }
+a {
+    color: var(--cor-primaria);
+}
+
+.cabecalho {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.marca-imagem {
+    display: block;
+    width: 96px;
+    max-width: 25vw;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
+
+.navegacao {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.navegacao form {
+    margin: 0;
+}
+
+.navegacao button {
+    width: auto;
+    padding: 8px 16px;
+}
+
+.rodape {
+    text-align: center;
+    font-size: 0.875rem;
+}
