@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administração | Login Seguro</title>
-    <link rel="stylesheet" th:href="@{/css/estilo.css}">
-</head>
+<head th:replace="~{fragmentos/layout :: head('Administração')}"></head>
 <body>
+<header th:replace="~{fragmentos/layout :: cabecalho}"></header>
 <main class="container">
     <h1>Administração</h1>
     <p>Você tem acesso à área administrativa.</p>
@@ -15,5 +11,6 @@
     </p>
     <a th:href="@{/inicio}">Voltar ao início</a>
 </main>
+<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
 </body>
 </html>

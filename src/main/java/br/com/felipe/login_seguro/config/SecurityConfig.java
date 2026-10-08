@@ -27,6 +27,7 @@ public class SecurityConfig {
                                 "/login",
                                 "/cadastro",
                                 "/css/**",
+                                "/imagens/**",
                                 "/error"
                         ).permitAll()
                         .requestMatchers("/admin", "/admin/**")
