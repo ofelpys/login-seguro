@@ -16,7 +16,6 @@ import java.util.List;
 import br.com.felipe.login_seguro.dto.UsuarioAtualizacaoRequestDTO;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -170,15 +169,9 @@ public class UsuarioService implements IUsuarioService {
     }
 
     private void invalidarSessoes(String email) {
-        for (Object principal : sessionRegistry.getAllPrincipals()) {
-            if (principal instanceof UserDetails usuarioLogado
-                    && usuarioLogado.getUsername().equals(email)) {
-
-                for (SessionInformation sessao :
-                        sessionRegistry.getAllSessions(principal, false)) {
-                    sessao.expireNow();
-                }
-            }
+        for (SessionInformation sessao :
+                sessionRegistry.getAllSessions(email, false)) {
+            sessao.expireNow();
         }
     }
 }
